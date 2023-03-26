@@ -3,6 +3,7 @@ package imale.blogapirest.Controller;
 import imale.blogapirest.Dto.PostPageableValuesDto;
 import imale.blogapirest.Dto.PostDto;
 import imale.blogapirest.Service.PostService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public class PostController {
     private PostService postService;
 
     @PostMapping
-    public ResponseEntity<PostDto> savePost(@RequestBody PostDto postDto){
+    public ResponseEntity<PostDto> savePost(@Valid @RequestBody PostDto postDto){
         return  new ResponseEntity<>(postService.newPost(postDto), HttpStatus.CREATED);
     }
 
@@ -35,7 +36,7 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostDto> updatePost(@PathVariable("id") long id, @RequestBody PostDto postDto){
+    public ResponseEntity<PostDto> updatePost(@PathVariable("id") long id, @Valid @RequestBody PostDto postDto){
         return new ResponseEntity<>(postService.updatePost(postDto, id), HttpStatus.OK);
     }
 

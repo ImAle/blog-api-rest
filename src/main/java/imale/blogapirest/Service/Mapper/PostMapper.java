@@ -15,15 +15,11 @@ public class PostMapper{
     ModelMapper modelMapper = new ModelMapper();
 
     public PostDto toDto(Post entity){
-        final PostDto dto = new PostDto();
-        modelMapper.map(entity, dto);
-        return dto;
+        return modelMapper.map(entity, PostDto.class);
     }
 
     public Post toEntity(PostDto dto){
-        final Post entity = new Post();
-        modelMapper.map(dto, entity);
-        return entity;
+        return modelMapper.map(dto, Post.class);
     }
 
     public PostPageableValuesDto toPostPageableValues(List<PostDto> postDtos, Page<Post> dataPageable, int pageSize, int pageNumber){
