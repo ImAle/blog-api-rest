@@ -1,13 +1,12 @@
 package imale.blogapirest.Controller;
 
+import imale.blogapirest.Dto.PostPageableValuesDto;
 import imale.blogapirest.Dto.PostDto;
 import imale.blogapirest.Service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/post")
@@ -22,8 +21,12 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostDto>> getAllPosts(){
-        return new ResponseEntity<>(postService.getAllPosts(),HttpStatus.OK);
+    public ResponseEntity<PostPageableValuesDto> getAllPosts(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "15",required = false) int pageSize,
+            @RequestParam(value = "SortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir){
+        return new ResponseEntity<>(postService.getAllPosts(pageNumber, pageSize, sortBy, sortDir),HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

@@ -1,11 +1,15 @@
 package imale.blogapirest.Service;
 
+import imale.blogapirest.Dto.PostPageableValuesDto;
 import imale.blogapirest.Dto.PostDto;
 import imale.blogapirest.Entity.Post;
 import imale.blogapirest.Exception.ResourceNotFoundException;
 import imale.blogapirest.Repository.PostRepository;
 import imale.blogapirest.Service.Mapper.PostMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,14 +34,16 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<PostDto> getAllPosts() {
-        // Find all posts in DB
-        List<Post> posts = postRepository.findAll();
-        // Convert them into a list of PostDto
-        List<PostDto> postDtos = posts.stream()
-                .map(post -> postMapper.toDto(post))
-                .collect(Collectors.toList());
-        return postDtos;
+    public PostPageableValuesDto getAllPosts(int pageNumber, int pageSize, String sortBy, String sortDir) {
+        // Choosing if asc or desc sorting
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+        // Posts Pageable
+        PageRequest pageable = PageRequest.of(pageNumber, pageSize, sort);
+        Page<Post> postPaged = postRepository.findAll(pageable);
+        List<Post> postList = postPaged.getContent();
+        List<PostDto> postsToDisplay =  postList.stream().map(post -> postMapper.toDto(post)).collect(Collectors.toList());
+        // Get more data as the number of elements, pages, if it is the last page, pageNumber and pageSize to display
+        return postMapper.toPostPageableValues(postsToDisplay, postPaged, pageSize, pageNumber);
     }
 
     @Override
@@ -69,6 +75,5 @@ public class PostServiceImpl implements PostService{
         // Delete Post
         postRepository.delete(post);
     }
-
 
 }

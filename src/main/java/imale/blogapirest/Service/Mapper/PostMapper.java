@@ -1,9 +1,13 @@
 package imale.blogapirest.Service.Mapper;
 
 import imale.blogapirest.Dto.PostDto;
+import imale.blogapirest.Dto.PostPageableValuesDto;
 import imale.blogapirest.Entity.Post;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PostMapper{
@@ -20,5 +24,16 @@ public class PostMapper{
         final Post entity = new Post();
         modelMapper.map(dto, entity);
         return entity;
+    }
+
+    public PostPageableValuesDto toPostPageableValues(List<PostDto> postDtos, Page<Post> dataPageable, int pageSize, int pageNumber){
+        PostPageableValuesDto postPageableValuesDto = new PostPageableValuesDto();
+        postPageableValuesDto.setPosts(postDtos);
+        postPageableValuesDto.setPageSize(pageSize);
+        postPageableValuesDto.setPageNumber(pageNumber);
+        postPageableValuesDto.setNumberOfElements(dataPageable.getTotalElements());
+        postPageableValuesDto.setNumberOfPages(dataPageable.getTotalPages() - 1);
+        postPageableValuesDto.setLast(dataPageable.isLast());
+        return postPageableValuesDto;
     }
 }

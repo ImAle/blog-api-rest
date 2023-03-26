@@ -1,14 +1,13 @@
 package imale.blogapirest.Service;
 
+import imale.blogapirest.Dto.PostPageableValuesDto;
 import imale.blogapirest.Dto.PostDto;
-
-import java.util.List;
 
 public interface PostService {
 
-    public PostDto newPost(PostDto postDto);
-    public List<PostDto> getAllPosts();
-    public PostDto getPostById(Long id);
-    public PostDto updatePost(PostDto postDto, long id);
-    public void deletePost(long id);
+    PostDto newPost(PostDto postDto);
+    PostPageableValuesDto getAllPosts(int pageNumber, int pageSize,String sortBy, String sortDir);
+    PostDto getPostById(Long id);
+    PostDto updatePost(PostDto postDto, long id);
+    void deletePost(long id);
 }
