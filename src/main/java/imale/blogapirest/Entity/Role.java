@@ -1,13 +1,17 @@
 package imale.blogapirest.Entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Getter
-@Setter
-public class Rol {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +19,6 @@ public class Rol {
     @Column(length = 60)
     private String name;
 
-    public Rol(){}
-
-
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> usersRol = new HashSet<>();
 }
